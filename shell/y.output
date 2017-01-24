@@ -1,0 +1,1149 @@
+State 13 conflicts: 1 shift/reduce
+State 14 conflicts: 1 shift/reduce
+State 29 conflicts: 1 shift/reduce
+State 36 conflicts: 3 reduce/reduce
+State 39 conflicts: 1 shift/reduce
+State 41 conflicts: 1 shift/reduce
+State 42 conflicts: 1 shift/reduce
+State 61 conflicts: 1 shift/reduce
+State 65 conflicts: 1 shift/reduce
+State 67 conflicts: 1 shift/reduce
+
+
+Grammar
+
+    0 $accept: commandline $end
+
+    1 commandline: command_syntax NEWLINE
+    2            | built_in NEWLINE
+    3            | built_in others NEWLINE
+    4            | built_in others quoted_string NEWLINE
+    5            | built_in quoted_string NEWLINE
+    6            | built_in environ_variable NEWLINE
+    7            | environ_variable NEWLINE
+    8            | errors NEWLINE
+    9            | NEWLINE
+   10            | command_syntax AMPER NEWLINE
+   11            | built_in AMPER NEWLINE
+   12            | built_in others AMPER NEWLINE
+   13            | built_in others quoted_string AMPER NEWLINE
+   14            | built_in quoted_string AMPER NEWLINE
+   15            | built_in environ_variable AMPER NEWLINE
+   16            | environ_variable AMPER NEWLINE
+
+   17 command_syntax: others component_pipe redirection_io
+   18               | others quoted_string component_pipe redirection_io
+   19               | others environ_variable component_pipe redirection_io
+   20               | others environ_variable others component_pipe redirection_io
+   21               | others quoted_string others component_pipe redirection_io
+   22               | others others component_pipe redirection_input others redirection_io
+
+   23 component_pipe: %empty
+   24               | pipe
+   25               | component_pipe others
+   26               | component_pipe others pipe
+
+   27 built_in: CD
+   28         | SETENV
+   29         | PRINTENV
+   30         | UNSETENV
+   31         | ALIAS
+   32         | UNALIAS
+   33         | EXIT
+
+   34 others: WORD
+   35       | others WORD
+
+   36 redirection_io: %empty
+   37               | redirection_input others
+   38               | redirection_input others redirection_output others
+   39               | redirection_output others
+   40               | redirection_output others redirection_output others
+   41               | redirection_input others redirection_error others
+   42               | redirection_input others redirection_output others redirection_error others
+   43               | redirection_output others redirection_error others
+   44               | redirection_error others
+   45               | redirection_error
+   46               | redirection_input others redirection_error
+   47               | redirection_input others redirection_output others redirection_error
+   48               | redirection_output others redirection_error
+
+   49 redirection_input: LT
+
+   50 redirection_output: GT
+   51                   | GTGT
+
+   52 redirection_error: GTERR
+   53                  | GTERRIN
+
+   54 pipe: PIPE
+
+   55 environ_variable: ENV_START WORD ENV_END
+
+   56 quoted_string: QUOTED_STRING
+
+   57 errors: built_in others redirection_io
+   58       | built_in redirection_io
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+SETENV (258) 28
+PRINTENV (259) 29
+UNSETENV (260) 30
+CD (261) 27
+ALIAS (262) 31
+UNALIAS (263) 32
+EXIT (264) 33
+WORD (265) 34 35 55
+NEWLINE (266) 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16
+LT (267) 49
+GT (268) 50
+QUOTED_STRING (269) 56
+PIPE (270) 54
+ENV_START (271) 55
+ENV_END (272) 55
+GTGT (273) 51
+GTERR (274) 52
+GTERRIN (275) 53
+AMPER (276) 10 11 12 13 14 15 16
+
+
+Nonterminals, with rules where they appear
+
+$accept (22)
+    on left: 0
+commandline (23)
+    on left: 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16, on right: 0
+command_syntax (24)
+    on left: 17 18 19 20 21 22, on right: 1 10
+component_pipe (25)
+    on left: 23 24 25 26, on right: 17 18 19 20 21 22 25 26
+built_in (26)
+    on left: 27 28 29 30 31 32 33, on right: 2 3 4 5 6 11 12 13 14
+    15 57 58
+others (27)
+    on left: 34 35, on right: 3 4 12 13 17 18 19 20 21 22 25 26 35
+    37 38 39 40 41 42 43 44 46 47 48 57
+redirection_io (28)
+    on left: 36 37 38 39 40 41 42 43 44 45 46 47 48, on right: 17 18
+    19 20 21 22 57 58
+redirection_input (29)
+    on left: 49, on right: 22 37 38 41 42 46 47
+redirection_output (30)
+    on left: 50 51, on right: 38 39 40 42 43 47 48
+redirection_error (31)
+    on left: 52 53, on right: 41 42 43 44 45 46 47 48
+pipe (32)
+    on left: 54, on right: 24 26
+environ_variable (33)
+    on left: 55, on right: 6 7 15 16 19 20
+quoted_string (34)
+    on left: 56, on right: 4 5 13 14 18 21
+errors (35)
+    on left: 57 58, on right: 8
+
+
+State 0
+
+    0 $accept: . commandline $end
+
+    SETENV     shift, and go to state 1
+    PRINTENV   shift, and go to state 2
+    UNSETENV   shift, and go to state 3
+    CD         shift, and go to state 4
+    ALIAS      shift, and go to state 5
+    UNALIAS    shift, and go to state 6
+    EXIT       shift, and go to state 7
+    WORD       shift, and go to state 8
+    NEWLINE    shift, and go to state 9
+    ENV_START  shift, and go to state 10
+
+    commandline       go to state 11
+    command_syntax    go to state 12
+    built_in          go to state 13
+    others            go to state 14
+    environ_variable  go to state 15
+    errors            go to state 16
+
+
+State 1
+
+   28 built_in: SETENV .
+
+    $default  reduce using rule 28 (built_in)
+
+
+State 2
+
+   29 built_in: PRINTENV .
+
+    $default  reduce using rule 29 (built_in)
+
+
+State 3
+
+   30 built_in: UNSETENV .
+
+    $default  reduce using rule 30 (built_in)
+
+
+State 4
+
+   27 built_in: CD .
+
+    $default  reduce using rule 27 (built_in)
+
+
+State 5
+
+   31 built_in: ALIAS .
+
+    $default  reduce using rule 31 (built_in)
+
+
+State 6
+
+   32 built_in: UNALIAS .
+
+    $default  reduce using rule 32 (built_in)
+
+
+State 7
+
+   33 built_in: EXIT .
+
+    $default  reduce using rule 33 (built_in)
+
+
+State 8
+
+   34 others: WORD .
+
+    $default  reduce using rule 34 (others)
+
+
+State 9
+
+    9 commandline: NEWLINE .
+
+    $default  reduce using rule 9 (commandline)
+
+
+State 10
+
+   55 environ_variable: ENV_START . WORD ENV_END
+
+    WORD  shift, and go to state 17
+
+
+State 11
+
+    0 $accept: commandline . $end
+
+    $end  shift, and go to state 18
+
+
+State 12
+
+    1 commandline: command_syntax . NEWLINE
+   10            | command_syntax . AMPER NEWLINE
+
+    NEWLINE  shift, and go to state 19
+    AMPER    shift, and go to state 20
+
+
+State 13
+
+    2 commandline: built_in . NEWLINE
+    3            | built_in . others NEWLINE
+    4            | built_in . others quoted_string NEWLINE
+    5            | built_in . quoted_string NEWLINE
+    6            | built_in . environ_variable NEWLINE
+   11            | built_in . AMPER NEWLINE
+   12            | built_in . others AMPER NEWLINE
+   13            | built_in . others quoted_string AMPER NEWLINE
+   14            | built_in . quoted_string AMPER NEWLINE
+   15            | built_in . environ_variable AMPER NEWLINE
+   57 errors: built_in . others redirection_io
+   58       | built_in . redirection_io
+
+    WORD           shift, and go to state 8
+    NEWLINE        shift, and go to state 21
+    LT             shift, and go to state 22
+    GT             shift, and go to state 23
+    QUOTED_STRING  shift, and go to state 24
+    ENV_START      shift, and go to state 10
+    GTGT           shift, and go to state 25
+    GTERR          shift, and go to state 26
+    GTERRIN        shift, and go to state 27
+    AMPER          shift, and go to state 28
+
+    NEWLINE  [reduce using rule 36 (redirection_io)]
+
+    others              go to state 29
+    redirection_io      go to state 30
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+    environ_variable    go to state 34
+    quoted_string       go to state 35
+
+
+State 14
+
+   17 command_syntax: others . component_pipe redirection_io
+   18               | others . quoted_string component_pipe redirection_io
+   19               | others . environ_variable component_pipe redirection_io
+   20               | others . environ_variable others component_pipe redirection_io
+   21               | others . quoted_string others component_pipe redirection_io
+   22               | others . others component_pipe redirection_input others redirection_io
+   35 others: others . WORD
+
+    WORD           shift, and go to state 36
+    QUOTED_STRING  shift, and go to state 24
+    PIPE           shift, and go to state 37
+    ENV_START      shift, and go to state 10
+
+    WORD      [reduce using rule 23 (component_pipe)]
+    $default  reduce using rule 23 (component_pipe)
+
+    component_pipe    go to state 38
+    others            go to state 39
+    pipe              go to state 40
+    environ_variable  go to state 41
+    quoted_string     go to state 42
+
+
+State 15
+
+    7 commandline: environ_variable . NEWLINE
+   16            | environ_variable . AMPER NEWLINE
+
+    NEWLINE  shift, and go to state 43
+    AMPER    shift, and go to state 44
+
+
+State 16
+
+    8 commandline: errors . NEWLINE
+
+    NEWLINE  shift, and go to state 45
+
+
+State 17
+
+   55 environ_variable: ENV_START WORD . ENV_END
+
+    ENV_END  shift, and go to state 46
+
+
+State 18
+
+    0 $accept: commandline $end .
+
+    $default  accept
+
+
+State 19
+
+    1 commandline: command_syntax NEWLINE .
+
+    $default  reduce using rule 1 (commandline)
+
+
+State 20
+
+   10 commandline: command_syntax AMPER . NEWLINE
+
+    NEWLINE  shift, and go to state 47
+
+
+State 21
+
+    2 commandline: built_in NEWLINE .
+
+    $default  reduce using rule 2 (commandline)
+
+
+State 22
+
+   49 redirection_input: LT .
+
+    $default  reduce using rule 49 (redirection_input)
+
+
+State 23
+
+   50 redirection_output: GT .
+
+    $default  reduce using rule 50 (redirection_output)
+
+
+State 24
+
+   56 quoted_string: QUOTED_STRING .
+
+    $default  reduce using rule 56 (quoted_string)
+
+
+State 25
+
+   51 redirection_output: GTGT .
+
+    $default  reduce using rule 51 (redirection_output)
+
+
+State 26
+
+   52 redirection_error: GTERR .
+
+    $default  reduce using rule 52 (redirection_error)
+
+
+State 27
+
+   53 redirection_error: GTERRIN .
+
+    $default  reduce using rule 53 (redirection_error)
+
+
+State 28
+
+   11 commandline: built_in AMPER . NEWLINE
+
+    NEWLINE  shift, and go to state 48
+
+
+State 29
+
+    3 commandline: built_in others . NEWLINE
+    4            | built_in others . quoted_string NEWLINE
+   12            | built_in others . AMPER NEWLINE
+   13            | built_in others . quoted_string AMPER NEWLINE
+   35 others: others . WORD
+   57 errors: built_in others . redirection_io
+
+    WORD           shift, and go to state 49
+    NEWLINE        shift, and go to state 50
+    LT             shift, and go to state 22
+    GT             shift, and go to state 23
+    QUOTED_STRING  shift, and go to state 24
+    GTGT           shift, and go to state 25
+    GTERR          shift, and go to state 26
+    GTERRIN        shift, and go to state 27
+    AMPER          shift, and go to state 51
+
+    NEWLINE  [reduce using rule 36 (redirection_io)]
+
+    redirection_io      go to state 52
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+    quoted_string       go to state 53
+
+
+State 30
+
+   58 errors: built_in redirection_io .
+
+    $default  reduce using rule 58 (errors)
+
+
+State 31
+
+   37 redirection_io: redirection_input . others
+   38               | redirection_input . others redirection_output others
+   41               | redirection_input . others redirection_error others
+   42               | redirection_input . others redirection_output others redirection_error others
+   46               | redirection_input . others redirection_error
+   47               | redirection_input . others redirection_output others redirection_error
+
+    WORD  shift, and go to state 8
+
+    others  go to state 54
+
+
+State 32
+
+   39 redirection_io: redirection_output . others
+   40               | redirection_output . others redirection_output others
+   43               | redirection_output . others redirection_error others
+   48               | redirection_output . others redirection_error
+
+    WORD  shift, and go to state 8
+
+    others  go to state 55
+
+
+State 33
+
+   44 redirection_io: redirection_error . others
+   45               | redirection_error .
+
+    WORD  shift, and go to state 8
+
+    $default  reduce using rule 45 (redirection_io)
+
+    others  go to state 56
+
+
+State 34
+
+    6 commandline: built_in environ_variable . NEWLINE
+   15            | built_in environ_variable . AMPER NEWLINE
+
+    NEWLINE  shift, and go to state 57
+    AMPER    shift, and go to state 58
+
+
+State 35
+
+    5 commandline: built_in quoted_string . NEWLINE
+   14            | built_in quoted_string . AMPER NEWLINE
+
+    NEWLINE  shift, and go to state 59
+    AMPER    shift, and go to state 60
+
+
+State 36
+
+   34 others: WORD .
+   35       | others WORD .
+
+    WORD      reduce using rule 34 (others)
+    WORD      [reduce using rule 35 (others)]
+    LT        reduce using rule 34 (others)
+    LT        [reduce using rule 35 (others)]
+    PIPE      reduce using rule 34 (others)
+    PIPE      [reduce using rule 35 (others)]
+    $default  reduce using rule 35 (others)
+
+
+State 37
+
+   54 pipe: PIPE .
+
+    $default  reduce using rule 54 (pipe)
+
+
+State 38
+
+   17 command_syntax: others component_pipe . redirection_io
+   25 component_pipe: component_pipe . others
+   26               | component_pipe . others pipe
+
+    WORD     shift, and go to state 8
+    LT       shift, and go to state 22
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 36 (redirection_io)
+
+    others              go to state 61
+    redirection_io      go to state 62
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+
+
+State 39
+
+   22 command_syntax: others others . component_pipe redirection_input others redirection_io
+   35 others: others . WORD
+
+    WORD  shift, and go to state 49
+    PIPE  shift, and go to state 37
+
+    WORD      [reduce using rule 23 (component_pipe)]
+    $default  reduce using rule 23 (component_pipe)
+
+    component_pipe  go to state 63
+    pipe            go to state 40
+
+
+State 40
+
+   24 component_pipe: pipe .
+
+    $default  reduce using rule 24 (component_pipe)
+
+
+State 41
+
+   19 command_syntax: others environ_variable . component_pipe redirection_io
+   20               | others environ_variable . others component_pipe redirection_io
+
+    WORD  shift, and go to state 8
+    PIPE  shift, and go to state 37
+
+    WORD      [reduce using rule 23 (component_pipe)]
+    $default  reduce using rule 23 (component_pipe)
+
+    component_pipe  go to state 64
+    others          go to state 65
+    pipe            go to state 40
+
+
+State 42
+
+   18 command_syntax: others quoted_string . component_pipe redirection_io
+   21               | others quoted_string . others component_pipe redirection_io
+
+    WORD  shift, and go to state 8
+    PIPE  shift, and go to state 37
+
+    WORD      [reduce using rule 23 (component_pipe)]
+    $default  reduce using rule 23 (component_pipe)
+
+    component_pipe  go to state 66
+    others          go to state 67
+    pipe            go to state 40
+
+
+State 43
+
+    7 commandline: environ_variable NEWLINE .
+
+    $default  reduce using rule 7 (commandline)
+
+
+State 44
+
+   16 commandline: environ_variable AMPER . NEWLINE
+
+    NEWLINE  shift, and go to state 68
+
+
+State 45
+
+    8 commandline: errors NEWLINE .
+
+    $default  reduce using rule 8 (commandline)
+
+
+State 46
+
+   55 environ_variable: ENV_START WORD ENV_END .
+
+    $default  reduce using rule 55 (environ_variable)
+
+
+State 47
+
+   10 commandline: command_syntax AMPER NEWLINE .
+
+    $default  reduce using rule 10 (commandline)
+
+
+State 48
+
+   11 commandline: built_in AMPER NEWLINE .
+
+    $default  reduce using rule 11 (commandline)
+
+
+State 49
+
+   35 others: others WORD .
+
+    $default  reduce using rule 35 (others)
+
+
+State 50
+
+    3 commandline: built_in others NEWLINE .
+
+    $default  reduce using rule 3 (commandline)
+
+
+State 51
+
+   12 commandline: built_in others AMPER . NEWLINE
+
+    NEWLINE  shift, and go to state 69
+
+
+State 52
+
+   57 errors: built_in others redirection_io .
+
+    $default  reduce using rule 57 (errors)
+
+
+State 53
+
+    4 commandline: built_in others quoted_string . NEWLINE
+   13            | built_in others quoted_string . AMPER NEWLINE
+
+    NEWLINE  shift, and go to state 70
+    AMPER    shift, and go to state 71
+
+
+State 54
+
+   35 others: others . WORD
+   37 redirection_io: redirection_input others .
+   38               | redirection_input others . redirection_output others
+   41               | redirection_input others . redirection_error others
+   42               | redirection_input others . redirection_output others redirection_error others
+   46               | redirection_input others . redirection_error
+   47               | redirection_input others . redirection_output others redirection_error
+
+    WORD     shift, and go to state 49
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 37 (redirection_io)
+
+    redirection_output  go to state 72
+    redirection_error   go to state 73
+
+
+State 55
+
+   35 others: others . WORD
+   39 redirection_io: redirection_output others .
+   40               | redirection_output others . redirection_output others
+   43               | redirection_output others . redirection_error others
+   48               | redirection_output others . redirection_error
+
+    WORD     shift, and go to state 49
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 39 (redirection_io)
+
+    redirection_output  go to state 74
+    redirection_error   go to state 75
+
+
+State 56
+
+   35 others: others . WORD
+   44 redirection_io: redirection_error others .
+
+    WORD  shift, and go to state 49
+
+    $default  reduce using rule 44 (redirection_io)
+
+
+State 57
+
+    6 commandline: built_in environ_variable NEWLINE .
+
+    $default  reduce using rule 6 (commandline)
+
+
+State 58
+
+   15 commandline: built_in environ_variable AMPER . NEWLINE
+
+    NEWLINE  shift, and go to state 76
+
+
+State 59
+
+    5 commandline: built_in quoted_string NEWLINE .
+
+    $default  reduce using rule 5 (commandline)
+
+
+State 60
+
+   14 commandline: built_in quoted_string AMPER . NEWLINE
+
+    NEWLINE  shift, and go to state 77
+
+
+State 61
+
+   25 component_pipe: component_pipe others .
+   26               | component_pipe others . pipe
+   35 others: others . WORD
+
+    WORD  shift, and go to state 49
+    PIPE  shift, and go to state 37
+
+    WORD      [reduce using rule 25 (component_pipe)]
+    $default  reduce using rule 25 (component_pipe)
+
+    pipe  go to state 78
+
+
+State 62
+
+   17 command_syntax: others component_pipe redirection_io .
+
+    $default  reduce using rule 17 (command_syntax)
+
+
+State 63
+
+   22 command_syntax: others others component_pipe . redirection_input others redirection_io
+   25 component_pipe: component_pipe . others
+   26               | component_pipe . others pipe
+
+    WORD  shift, and go to state 8
+    LT    shift, and go to state 22
+
+    others             go to state 61
+    redirection_input  go to state 79
+
+
+State 64
+
+   19 command_syntax: others environ_variable component_pipe . redirection_io
+   25 component_pipe: component_pipe . others
+   26               | component_pipe . others pipe
+
+    WORD     shift, and go to state 8
+    LT       shift, and go to state 22
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 36 (redirection_io)
+
+    others              go to state 61
+    redirection_io      go to state 80
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+
+
+State 65
+
+   20 command_syntax: others environ_variable others . component_pipe redirection_io
+   35 others: others . WORD
+
+    WORD  shift, and go to state 49
+    PIPE  shift, and go to state 37
+
+    WORD      [reduce using rule 23 (component_pipe)]
+    $default  reduce using rule 23 (component_pipe)
+
+    component_pipe  go to state 81
+    pipe            go to state 40
+
+
+State 66
+
+   18 command_syntax: others quoted_string component_pipe . redirection_io
+   25 component_pipe: component_pipe . others
+   26               | component_pipe . others pipe
+
+    WORD     shift, and go to state 8
+    LT       shift, and go to state 22
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 36 (redirection_io)
+
+    others              go to state 61
+    redirection_io      go to state 82
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+
+
+State 67
+
+   21 command_syntax: others quoted_string others . component_pipe redirection_io
+   35 others: others . WORD
+
+    WORD  shift, and go to state 49
+    PIPE  shift, and go to state 37
+
+    WORD      [reduce using rule 23 (component_pipe)]
+    $default  reduce using rule 23 (component_pipe)
+
+    component_pipe  go to state 83
+    pipe            go to state 40
+
+
+State 68
+
+   16 commandline: environ_variable AMPER NEWLINE .
+
+    $default  reduce using rule 16 (commandline)
+
+
+State 69
+
+   12 commandline: built_in others AMPER NEWLINE .
+
+    $default  reduce using rule 12 (commandline)
+
+
+State 70
+
+    4 commandline: built_in others quoted_string NEWLINE .
+
+    $default  reduce using rule 4 (commandline)
+
+
+State 71
+
+   13 commandline: built_in others quoted_string AMPER . NEWLINE
+
+    NEWLINE  shift, and go to state 84
+
+
+State 72
+
+   38 redirection_io: redirection_input others redirection_output . others
+   42               | redirection_input others redirection_output . others redirection_error others
+   47               | redirection_input others redirection_output . others redirection_error
+
+    WORD  shift, and go to state 8
+
+    others  go to state 85
+
+
+State 73
+
+   41 redirection_io: redirection_input others redirection_error . others
+   46               | redirection_input others redirection_error .
+
+    WORD  shift, and go to state 8
+
+    $default  reduce using rule 46 (redirection_io)
+
+    others  go to state 86
+
+
+State 74
+
+   40 redirection_io: redirection_output others redirection_output . others
+
+    WORD  shift, and go to state 8
+
+    others  go to state 87
+
+
+State 75
+
+   43 redirection_io: redirection_output others redirection_error . others
+   48               | redirection_output others redirection_error .
+
+    WORD  shift, and go to state 8
+
+    $default  reduce using rule 48 (redirection_io)
+
+    others  go to state 88
+
+
+State 76
+
+   15 commandline: built_in environ_variable AMPER NEWLINE .
+
+    $default  reduce using rule 15 (commandline)
+
+
+State 77
+
+   14 commandline: built_in quoted_string AMPER NEWLINE .
+
+    $default  reduce using rule 14 (commandline)
+
+
+State 78
+
+   26 component_pipe: component_pipe others pipe .
+
+    $default  reduce using rule 26 (component_pipe)
+
+
+State 79
+
+   22 command_syntax: others others component_pipe redirection_input . others redirection_io
+
+    WORD  shift, and go to state 8
+
+    others  go to state 89
+
+
+State 80
+
+   19 command_syntax: others environ_variable component_pipe redirection_io .
+
+    $default  reduce using rule 19 (command_syntax)
+
+
+State 81
+
+   20 command_syntax: others environ_variable others component_pipe . redirection_io
+   25 component_pipe: component_pipe . others
+   26               | component_pipe . others pipe
+
+    WORD     shift, and go to state 8
+    LT       shift, and go to state 22
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 36 (redirection_io)
+
+    others              go to state 61
+    redirection_io      go to state 90
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+
+
+State 82
+
+   18 command_syntax: others quoted_string component_pipe redirection_io .
+
+    $default  reduce using rule 18 (command_syntax)
+
+
+State 83
+
+   21 command_syntax: others quoted_string others component_pipe . redirection_io
+   25 component_pipe: component_pipe . others
+   26               | component_pipe . others pipe
+
+    WORD     shift, and go to state 8
+    LT       shift, and go to state 22
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 36 (redirection_io)
+
+    others              go to state 61
+    redirection_io      go to state 91
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+
+
+State 84
+
+   13 commandline: built_in others quoted_string AMPER NEWLINE .
+
+    $default  reduce using rule 13 (commandline)
+
+
+State 85
+
+   35 others: others . WORD
+   38 redirection_io: redirection_input others redirection_output others .
+   42               | redirection_input others redirection_output others . redirection_error others
+   47               | redirection_input others redirection_output others . redirection_error
+
+    WORD     shift, and go to state 49
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 38 (redirection_io)
+
+    redirection_error  go to state 92
+
+
+State 86
+
+   35 others: others . WORD
+   41 redirection_io: redirection_input others redirection_error others .
+
+    WORD  shift, and go to state 49
+
+    $default  reduce using rule 41 (redirection_io)
+
+
+State 87
+
+   35 others: others . WORD
+   40 redirection_io: redirection_output others redirection_output others .
+
+    WORD  shift, and go to state 49
+
+    $default  reduce using rule 40 (redirection_io)
+
+
+State 88
+
+   35 others: others . WORD
+   43 redirection_io: redirection_output others redirection_error others .
+
+    WORD  shift, and go to state 49
+
+    $default  reduce using rule 43 (redirection_io)
+
+
+State 89
+
+   22 command_syntax: others others component_pipe redirection_input others . redirection_io
+   35 others: others . WORD
+
+    WORD     shift, and go to state 49
+    LT       shift, and go to state 22
+    GT       shift, and go to state 23
+    GTGT     shift, and go to state 25
+    GTERR    shift, and go to state 26
+    GTERRIN  shift, and go to state 27
+
+    $default  reduce using rule 36 (redirection_io)
+
+    redirection_io      go to state 93
+    redirection_input   go to state 31
+    redirection_output  go to state 32
+    redirection_error   go to state 33
+
+
+State 90
+
+   20 command_syntax: others environ_variable others component_pipe redirection_io .
+
+    $default  reduce using rule 20 (command_syntax)
+
+
+State 91
+
+   21 command_syntax: others quoted_string others component_pipe redirection_io .
+
+    $default  reduce using rule 21 (command_syntax)
+
+
+State 92
+
+   42 redirection_io: redirection_input others redirection_output others redirection_error . others
+   47               | redirection_input others redirection_output others redirection_error .
+
+    WORD  shift, and go to state 8
+
+    $default  reduce using rule 47 (redirection_io)
+
+    others  go to state 94
+
+
+State 93
+
+   22 command_syntax: others others component_pipe redirection_input others redirection_io .
+
+    $default  reduce using rule 22 (command_syntax)
+
+
+State 94
+
+   35 others: others . WORD
+   42 redirection_io: redirection_input others redirection_output others redirection_error others .
+
+    WORD  shift, and go to state 49
+
+    $default  reduce using rule 42 (redirection_io)

@@ -1,0 +1,22 @@
+Alex Hu
+Gustavo Munoz
+COP4600 
+4/12/2015
+Shell Project
+
+-----README-----
+
+***Command for making using Makefile:
+make -f makefile.c 
+
+***Command for clean using Makefile:
+make -f makefile.c clean 
+
+***Known issues and bugs with shell executable:
+1.  When piping multiple commands MANUALLY, shell executes properly but exits with issue: "input in flex scanner failed"
+2.  Using wild card only yields first file found (instead of all files meeting that criteria)
+3.  Setenv does not expand
+4.  An environment variable in a string does not concatenate with a second string such as ${LIB}/libxc.a
+5.  Issues with file redirection to ./shell
+
+
